@@ -1,0 +1,162 @@
+{% extends "base.html" %}
+{% load static mptt_tags %}
+{% block head_title %}{% now "Y" as year %}{% now "E" as month %}
+<title>{{ object.author_name }} - Автор Портала {{ request.get_host }}</title>
+{% endblock %}
+{% block meta_descriprion %}{% now "Y" as year %}{% now "E" as month %}
+<meta name="description" content="{{ object.author_name }} - Автор Портала {{ request.get_host }}: материалы автора, количество просмотров, комментарии.">
+{% endblock %}
+{% block seo_schema %}{% now "Y" as year %}{% now "E" as month %}{% spaceless %}
+<meta name="referrer" content="no-referrer-when-downgrade">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<link rel="canonical" href="{{ object.get_absolute_url }}" />
+<script type="application/ld+json"> {"@context": "https://schema.org","@type": "BreadcrumbList","itemListElement": [{"@type": "ListItem","position": 0,"name": "Главная","item": "https://{{ request.get_host }}"},{% for category in category_bread_crumbs %}{"@type": "ListItem","position": {{ forloop.counter }},"name": "{{ category.title }}","item": "https://{{ request.get_host }}{{ category.get_absolute_url }}"} {% if forloop.last %}{% else %},{% endif %}{% endfor %}]}</script>
+<script type="application/ld+json">{"@context": "http://schema.org","@type": "Person","name": "{{ object.author_name }}","additionalName": "{{ object.get_absolute_url|cut:".html"|cut:"/author/" }}","jobTitle": "Автор","affiliation": "domoproektor.ru","email": "{{ object.get_absolute_url|cut:'.html'|cut:'/author/' }}@domoproektor.ru","telephone": "-","url": "https://{{ request.get_host }}{{ object.get_absolute_url }}","image": "https://{{ request.get_host }}{{ object.author_image.url }}","address": {"@type": "PostalAddress","addressCountry": "Россия","addressRegion": "Москва"}}</script>
+{% endspaceless %}{% endblock %}
+{% block extra_head %}
+{% endblock %}
+{% block body_type %}
+<body class="account-page my-account-page">
+	{% endblock %}
+	{% block content %}{% now "Y" as year %}{% now "E" as month %}
+	
+	<!-- Body Container -->
+	<div id="page-content"> 
+		
+		<!--End Page Header-->
+		
+		<!--Main Content-->
+		<div class="container">
+			<div class="row">
+				<div class="col-12 col-sm-12 col-md-12 col-lg-3 mb-4 mb-lg-0">
+					<!-- Dashboard sidebar -->
+					<div class="dashboard-sidebar bg-block">
+						<div class="profile-top text-center mb-4 px-3">
+							<div class="profile-image mb-3">
+								<img class="rounded-circle blur-up lazyload" data-src="{{ object.author_image.url }}" src="{{ object.author_image.url }}" alt="Автор {{ object.author_name }}" width="130" />
+							</div>
+							<div class="profile-detail">
+								<h3 class="mb-1">{{ object.author_name }}</h3>
+								<p class="text-muted">{{ object.get_absolute_url|cut:".html"|cut:"/author/" }}@domoproektor.ru</p>
+							</div>
+						</div>
+						<div class="dashboard-tab">
+							<ul class="nav nav-tabs flex-lg-column border-bottom-0" id="top-tab" role="tablist">
+								<li class="nav-item"><a href="#" data-bs-toggle="tab" data-bs-target="#info" class="nav-link active">Информация</a></li>
+								
+								<li class="nav-item"><a href="#" data-bs-toggle="tab" data-bs-target="#orders" class="nav-link">Мои статьи</a></li>
+								
+							</ul>
+						</div>
+					</div>
+					<!-- End Dashboard sidebar -->
+				</div>
+				<div class="col-12 col-sm-12 col-md-12 col-lg-9">
+					<div class="dashboard-content tab-content h-100" id="top-tabContent">
+						<!-- Account Info -->
+						<div class="tab-pane fade h-100 show active" id="info">
+							<div class="account-info h-100">
+								<div class="welcome-msg mb-4">
+									<h1>{{ object.author_name }}</h1>
+									
+								</div>
+								
+								
+								<div class="row g-3 row-cols-lg-3 row-cols-md-3 row-cols-sm-3 row-cols-1 mb-4">
+									<div class="counter-box">
+										<div class="bg-block d-flex-center flex-nowrap">
+											
+											<div class="content">
+												<h3 class="fs-5 mb-1 text-primary">{{ author_arts_count }}</h3>
+												<p>Количество постов</p>
+											</div>
+										</div>
+									</div>
+									<div class="counter-box">
+										<div class="bg-block d-flex-center flex-nowrap">
+											
+											<div class="content">
+												<h3 class="fs-5 mb-1 text-primary">{{ author_comments_count|default:0 }}</h3>
+												<p>Комментарии</p>
+											</div>
+										</div>
+									</div>
+									<div class="counter-box">
+										<div class="bg-block d-flex-center flex-nowrap">
+											
+											<div class="content">
+												<h3 class="fs-5 mb-1 text-primary">0</h3>
+												<p>Подписчиков</p>
+											</div>
+										</div>
+									</div>
+								</div>
+								
+								<div class="account-box">
+									<h3 class="mb-3">Об авторе</h3>
+									<div class="content">
+										{{ object.description|safe }}
+									</div>
+								</div>
+							</div>
+						</div>
+						<!-- End Account Info -->
+						
+						
+						<!-- My Orders -->
+						<div class="tab-pane fade h-100" id="orders">
+							<div class="orders-card mt-0 h-100">    
+								<div class="top-sec d-flex-justify-center justify-content-between mb-4">
+									<h2 class="mb-0">Мои Статьи</h2>
+								</div>
+								
+								<div class="table-bottom-brd table-responsive">
+									<table class="table align-middle text-center order-table">
+										<thead>
+											<tr class="table-head text-nowrap">
+												<th scope="col-2">Фото</th>
+												
+												<th scope="col-10">Заголовок</th>
+												
+												
+											</tr>
+										</thead>
+										<tbody>
+											<tr>
+												{% for item in author_arts %}									
+												
+												
+												
+												<td><img class="blur-up lazyload" data-src="{{ item.image.url }}" src="{{ item.image.url }}" width="50" alt="product" title="product" /></td>
+												
+												<td><span class="name"><a href="{{ item.get_absolute_url }}">{{ item.title }}</a></span></td>
+												
+												
+												
+												
+											</tr>
+											{% endfor %}	
+										</tbody>
+									</table>
+								</div>                                               
+							</div>
+						</div>
+						<!-- End My Orders -->
+						
+						
+					</div>
+				</div>
+			</div>
+		</div>
+		<!--End Main Content-->
+	</div>
+	<!-- End Body Container -->
+	
+	
+	
+	{% endblock content %}	
+	{% block extra_body %}
+	<script src="https://yastatic.net/share2/share.js"></script>
+	{% spaceless %}
+	{% endspaceless %}
+{% endblock %}

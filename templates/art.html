@@ -1,0 +1,382 @@
+{% extends "base.html" %}
+{% load static mptt_tags %}
+{% block head_title %}{% now "Y" as year %}{% now "E" as month %}
+<title>{% if object.metatitle %}{{ object.metatitle|title }}  {{ year }}{% else %}{{ object.title|title }}  {{ year }} - {{ request.get_host }}{% endif %}</title>
+{% endblock %}
+{% block meta_descriprion %}{% now "Y" as year %}{% now "E" as month %}
+<meta name="description" content="{% if object.metadescription %}{{ object.metadescription }} {% else %} {{ object.title|title }} {{ year }}{% endif %}">{% endblock %}
+{% block seo_schema %}{% now "Y" as year %}{% now "E" as month %}{% spaceless %}
+
+<meta name="referrer" content="no-referrer-when-downgrade">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<link rel="canonical" href="{{ request.get_host }}{{ object.get_absolute_url }}" />
+
+<script type="application/ld+json"> {"@context": "https://schema.org","@type": "BreadcrumbList","itemListElement": [{"@type": "ListItem","position": 0,"name": "Главная","item": "https://{{ request.get_host }}"},{% for category in category_bread_crumbs %}{"@type": "ListItem","position": {{ forloop.counter }},"name": "{{ category.title }}","item": "https://{{ request.get_host }}{{ category.get_absolute_url }}"} {% if forloop.last %}{% else %},{% endif %}{% endfor %}]}</script>
+
+
+
+
+
+{% endspaceless %}{% endblock %}
+{% block extra_head %}
+
+{% endblock %}
+
+{% block body_type %}
+<body class="blog-page blog-details-page">
+	{% endblock %}
+	
+	{% block content %}{% now "Y" as year %}{% now "E" as month %}
+	
+	
+	
+	
+	<div id="page-content"> 
+		<!--Page Header-->
+		<div class="page-header text-center">
+			<div class="container">
+				<div class="row">
+					<div class="col-12 col-sm-12 col-md-12 col-lg-12 d-flex justify-content-between align-items-center">
+						<div class="page-title">
+							
+						</div>
+						<!--Breadcrumbs-->
+						<div class="breadcrumbs">
+							<a href="/" title="Back to the home page">Главная</a>
+							<span class="title"><i class="icon anm anm-angle-right-l"></i>Blog</span>
+							<span class="main-title fw-bold"><i class="icon anm anm-angle-right-l"></i>Blog Details</span>
+							
+							{% for category in category_bread_crumbs %}
+							<span class="title">
+								<i class="icon anm anm-angle-right-l"></i>
+								<a href="{{ category.get_absolute_url }}">{{ category.title }}</a>
+							</span>
+							{% endfor %}
+							
+							<span class="main-title fw-bold">
+								<i class="icon anm anm-angle-right-l"></i>
+								<a>{{ object.title }}</a>
+							</span>
+							
+						</div>
+						<!--End Breadcrumbs-->
+					</div>
+				</div>
+			</div>
+		</div>
+		<!--End Page Header-->
+		
+		<!--Main Content-->
+		<div class="container">
+			<div class="row">
+				<div class="col-12 col-sm-12 col-md-12 col-lg-3 blog-sidebar sidebar sidebar-bg">
+					<!--Sidebar-->
+					<div class="sidebar-tags sidebar-sticky clearfix">
+						
+						<!--Recent Posts-->
+						<div class="sidebar-widget clearfix">
+							<div class="widget-title"><h2>Recent Posts</h2></div>
+							<div class="widget-content">
+								<div class="list list-sidebar-products">
+									<div class="mini-list-item d-flex align-items-center w-100 clearfix">
+										<div class="mini-image"><a class="item-link" href="blog-details.html"><img class="featured-image blur-up lazyload" data-src="assets/images/blog/post-img1-100x.jpg" src="assets/images/blog/post-img1-100x.jpg" alt="blog" width="100" height="100" /></a></div>
+										<div class="ms-3 details">
+											<a class="item-title" href="blog-details.html">Gift ideas for everyone</a>
+											<div class="item-meta opacity-75"><time datetime="2023-01-02">Jan 02, 2023</time></div>
+										</div>
+									</div>
+									<div class="mini-list-item d-flex align-items-center w-100 clearfix">
+										<div class="mini-image"><a class="item-link" href="blog-details.html"><img class="featured-image blur-up lazyload" data-src="assets/images/blog/post-img2-100x.jpg" src="assets/images/blog/post-img2-100x.jpg" alt="blog" width="100" height="100" /></a></div>
+										<div class="ms-3 details">
+											<a class="item-title" href="blog-details.html">Sales with best collection</a>
+											<div class="item-meta opacity-75"><time datetime="2023-01-24">Jan 24, 2023</time></div>
+										</div>
+									</div>
+									<div class="mini-list-item d-flex align-items-center w-100 clearfix">
+										<div class="mini-image"><a class="item-link" href="blog-details.html"><img class="featured-image blur-up lazyload" data-src="assets/images/blog/post-img3-100x.jpg" src="assets/images/blog/post-img3-100x.jpg" alt="blog" width="100" height="100" /></a></div>
+										<div class="ms-3 details">
+											<a class="item-title" href="blog-details.html">Word in classical literature</a>
+											<div class="item-meta opacity-75"><time datetime="2023-02-14">Feb 14, 2023</time></div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<!--End Recent Posts-->
+						<!--Popular Tags-->
+						<div class="sidebar-widget clearfix tags-clouds">
+							<div class="widget-title"><h2>Popular Tags</h2></div>
+							<div class="widget-content">
+								<ul class="tags-list d-flex-wrap">
+									<li class="item"><a class="rounded-3" href="blog-grid-sidebar.html">Fashion</a></li>
+									<li class="item"><a class="rounded-3" href="blog-grid-sidebar.html">Shoes</a></li>
+									<li class="item"><a class="rounded-3" href="blog-grid-sidebar.html">Beauty</a></li>
+									<li class="item"><a class="rounded-3" href="blog-grid-sidebar.html">Accessories</a></li>
+									<li class="item"><a class="rounded-3" href="blog-grid-sidebar.html">Trending</a></li>
+								</ul>
+							</div>
+						</div>
+						<!--End Popular Tags-->
+					</div>
+					<!--End Sidebar-->
+				</div>
+				
+				<!-- Blog Content-->
+				<div class="col-12 col-sm-12 col-md-12 col-lg-9 main-col">
+					<div class="blog-article"> 
+						<div class="blog-img mb-3">
+							<img class="rounded-0 blur-up lazyload" data-src="{{ object.image }}" src="{{ object.image }}" alt="{{ object.title }} фото" width="1200" height="700" />
+						</div>
+						<!-- Blog Content -->
+						<div class="blog-content">
+							<h1 class="h1">{{ object.title }}</h1>
+							
+							<ul class="publish-detail d-flex-wrap">                      
+								<li><i class="icon anm anm-user-al"></i> <span class="opacity-75 me-1">Автор:</span> User</li>
+								<li><i class="icon anm anm-clock-r"></i> <time datetime="2023-01-02">Jan 02, 2023</time></li>
+								<li><i class="icon anm anm-comments-l"></i> <a href="#">2 Comments</a></li>
+								<li><i class="icon anm anm-tag-r"></i><span class="opacity-75">Posted in</span><a class="ms-1" href="#">Accessories</a>,<a class="ms-1" href="#">Fashion</a>,<a class="ms-1" href="#">Bags</a></li>
+							</ul>
+							<hr />
+							<div class="content">
+								{{ object.shortdescription|safe }}
+								<div class="accordion accordion-flush" id="accordionFlushExample">
+									<div class="accordion-item">
+										<h2 class="accordion-header">
+											<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+												Содержание
+											</button>
+										</h2>
+										<div id="flush-collapseOne" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
+											<div class="accordion-body">
+												{{ toc|safe }}
+												
+											</div>
+										</div>
+									</div>
+									
+								</div>
+								{{ object.description|safe }}
+							</div>
+							<hr />
+							<div class="row blog-action d-flex-center justify-content-between">
+								<ul class="col-lg-6 tags-list d-flex-center">
+									<li class="item fw-600">Related Tags :</li>
+									<li class="item"><a class="text-link" href="blog-grid-sidebar.html">Fashion,</a></li>
+									<li class="item"><a class="text-link" href="blog-grid-sidebar.html">Shoes,</a></li>
+									<li class="item"><a class="text-link" href="blog-grid-sidebar.html">Accessories</a></li>
+									
+									{% if tag_tiling_search %}
+									{% for item in tag_tiling_search %}									
+									<li class="item"><a class="text-link" href="/t/?q={{ item.title }}"> {{ item.title }}  </a></li>									
+									{% endfor %}									
+									{% endif %}
+									
+								</ul>
+								
+								<div class="col-lg-6 mt-2 mt-lg-0 social-sharing d-flex-center justify-content-lg-end">
+									<span class="sharing-lbl fw-600">Share :</span>
+									<a href="#" class="d-flex-center btn btn-link btn--share share-facebook" data-bs-toggle="tooltip" data-bs-placement="top" title="Share on Facebook"><i class="icon anm anm-facebook-f"></i><span class="share-title d-none">Facebook</span></a>
+									<a href="#" class="d-flex-center btn btn-link btn--share share-facebook" data-bs-toggle="tooltip" data-bs-placement="top" title="Tweet on Twitter"><i class="icon anm anm-twitter"></i><span class="share-title d-none">Twitter</span></a>
+									<a href="#" class="d-flex-center btn btn-link btn--share share-facebook" data-bs-toggle="tooltip" data-bs-placement="top" title="Pin on Pinterest"><i class="icon anm anm-pinterest-p"></i><span class="share-title d-none">Pinterest</span></a>
+									<a href="#" class="d-flex-center btn btn-link btn--share share-facebook" data-bs-toggle="tooltip" data-bs-placement="top" title="Share on Instagram"><i class="icon anm anm-linkedin-in"></i><span class="share-title d-none">Instagram</span></a>
+									<a href="#" class="d-flex-center btn btn-link btn--share share-facebook" data-bs-toggle="tooltip" data-bs-placement="top" title="Share by Email"><i class="icon anm anm-envelope-l"></i><span class="share-title d-none">Email</span></a>
+								</div>
+							</div>
+							
+							<!-- Blog Nav -->
+							<div class="blog-nav d-flex-center justify-content-between mt-3">
+								
+								{% for item in neighbors2 %}
+								<div class="nav-prev fs-14">
+									<a href="{{ item.get_absolute_url }}">
+										<i class="align-middle me-2 icon anm anm-angle-left-r"></i>
+										<span class="align-middle">{{ item.title }}</span>
+									</a>
+								</div>
+								{% endfor %}	
+								{% for item in neighbors1 %}	
+								<div class="nav-next fs-14">
+									<a href="{{ item.get_absolute_url }}">
+										<span class="align-middle">{{ item.title }}</span>
+										<i class="align-middle ms-2 icon anm anm-angle-right-r"></i>
+									</a>
+								</div>
+								{% endfor %}		
+								
+								
+							</div>
+							<!-- End Blog Nav -->
+							<hr />
+							
+							<div class="author-bio">
+								<div class="author-image d-flex">
+									<a class="author-img" href="#"><img class="blur-up lazyload" data-src="assets/images/users/user-img3.jpg" src="assets/images/users/user-img3.jpg" alt="author" width="200" height="200" /></a>
+									<div class="author-info ms-4">
+										<h4 class="mb-2">Jhon Arthur</h4>
+										<p class="text-muted mb-2"><span class="postcount">234 posts</span><span class="postsince ms-2">Since 2023</span></p>
+										<p class="author-des">Hi there, I am a Hema blogger sharing Multipurpose Template that will give you and your customers a smooth shopping experience which can be used for various kinds of stores such as fashion.</p>
+									</div>
+								</div>
+							</div>
+							
+							<!-- Blog Comments -->
+							<div class="blog-comment section">
+								<h2 class="mb-4">Comments (3)</h2>
+								<ol class="comments-list">
+									<li class="comments-items">
+										<div class="comments-item d-flex w-100">
+											<div class="flex-shrink-0 comment-img"><img class="blur-up lazyload" data-src="assets/images/users/user-img1.jpg" src="assets/images/users/user-img1.jpg" alt="comment" width="200" height="200" /></div>
+											<div class="flex-grow-1 comment-content">
+												<div class="comment-user d-flex-center justify-content-between">
+													<div class="comment-author fw-600">Alex Sort</div>
+													<div class="comment-date opacity-75"><time datetime="2023-01-02">Jan 02, 2023</time></div>
+												</div>
+												<div class="comment-text my-2">It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software.</div>
+												<div class="comment-reply"><button type="button" class="text-link text-decoration-none"><i class="icon anm anm-reply me-2"></i>Reply</button></div>
+											</div>
+										</div>
+										<div class="comments-item d-flex w-100">
+											<div class="flex-shrink-0 comment-img"><img class="blur-up lazyload" data-src="assets/images/users/user-img2.jpg" src="assets/images/users/user-img2.jpg" alt="comment" width="200" height="200" /></div>
+											<div class="flex-grow-1 comment-content">
+												<div class="comment-user d-flex-center justify-content-between">
+													<div class="comment-author fw-600">Admin</div>
+													<div class="comment-date opacity-75"><time datetime="2023-01-03">Jan 03, 2023</time></div>
+												</div>
+												<div class="comment-text my-2">It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software.</div>
+												<div class="comment-reply"><button type="button" class="text-link text-decoration-none"><i class="icon anm anm-reply me-2"></i>Reply</button></div>
+											</div>
+										</div>
+									</li>
+								</ol>
+							</div>
+							<!-- End Blog Comments -->
+							<!-- Blog Comments Form -->
+							<div class="formFeilds comment-form form-vertical">
+								<form method="post" action="#">
+									<h2 class="mb-3">Leave a Comment</h2>
+									<div class="row">
+										<div class="col-12 col-sm-12 col-md-6 col-lg-6">
+											<div class="form-group">
+												<label for="commentName" class="d-none">Name</label>
+												<input type="text" id="commentName" name="contact[name]" placeholder="Name" value="" required />
+											</div>
+										</div>
+										<div class="col-12 col-sm-12 col-md-6 col-lg-6">
+											<div class="form-group">
+												<label for="commentEmail" class="d-none">Email</label>
+												<input type="email" id="commentEmail" name="contact[email]" placeholder="Email" value="" required />                        	
+											</div>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-12 col-sm-12 col-md-12 col-lg-12">
+											<div class="form-group">
+												<label for="commentMessage" class="d-none">Message</label>
+												<textarea rows="5" id="commentMessage" name="contact[body]" placeholder="Write Comment" required></textarea>
+											</div>
+										</div>  
+									</div>
+									<div class="row">
+										<div class="col-12 col-sm-12 col-md-12 col-lg-12">
+											<input type="submit" class="btn btn-lg" value="Post comment">
+										</div>
+									</div>
+								</form>
+							</div>
+							<!-- End Blog Comments Form -->
+							
+							
+							
+							
+							
+							
+							{% for item in arts %}
+							<div class="card">
+								<div class="card-body">
+									<div class="position-relative">
+										<a href="{{ item.get_absolute_url }}">
+											{% if item.image %}
+											<img class="card-img" src="/media/{{ item.image }}">
+											{% else %}
+											<img class="card-img" src="/static/img/noimage.jpg">
+											{% endif %}
+										</a>	
+										
+										
+										<div class="card-img-overlay d-flex align-items-start flex-column p-3">
+											
+											
+											
+											<div class="w-100 mt-auto">
+												<a href="{{ item.get_absolute_url }}" class="badge text-bg-info mb-2"><i class="fas fa-circle me-2 small fw-bold"></i>{{ item.category }}</a>
+											</div>
+										</div>
+									</div>
+									<div class="card-body px-0 pt-3">
+										<h5 class="card-title">
+											<a href="{{ item.get_absolute_url }}" class="btn-link text-reset stretched-link fw-bold">{{ item.title }}</a>
+										</h5>
+										
+										<ul class="nav nav-divider align-items-center d-none d-sm-inline-block">
+											<li class="nav-item">
+												<div class="nav-link">
+													<div class="d-flex align-items-center position-relative">
+														<div class="avatar avatar-xs">
+															
+														</div>
+														
+													</div>
+												</div>
+											</li>
+											
+										</ul>
+									</div>
+								</div>
+							</div>
+							{% endfor %}
+							
+							{% for item in market|dictsortreversed:"offer.price.value" %}
+							<figure class="card card-product-grid">
+								<div class="img-wrap"> 
+									<a onclick="window.open('{{ item.offer.url|cut:'https://pokupki.market.yandex.ru' }}')" style="cursor: pointer;" class="img-wrap rounded bg-gray-light d-flex">
+										<span class="topbar"><span class="adv m-1"></span></span>
+										<img height="250" class="mix-blend-multiply" src="{{ item.offer.photo.url }}" alt="{{ item.name|cut:'&#34;'|cut:',' }}"> 
+									</a>
+								</div>
+								<figcaption class="info-wrap border-top">
+									<div class="price-wrap">
+										{% if item.price.min %}
+										<strong class="price">{{ item.price.min|floatformat:0 }} ₽</strong> 
+										{% else %}
+										<strong class="price">{{ item.offer.price.value|floatformat:0 }} ₽</strong> 
+										{% endif %}
+									</div> 
+									<a onclick="window.open('{{ item.offer.url|cut:'https://pokupki.market.yandex.ru' }}')" style="cursor: pointer;" class="title mb-2 text-truncate">{{ item.name|cut:'&#34;'|cut:',' }}</a>
+									
+									<a onclick="window.open('{{ item.offer.url|cut:'https://pokupki.market.yandex.ru' }}')" style="cursor: pointer;" class="btn btn-primary float-right"><i class="fa fa-shopping-cart"></i></a>
+									
+								</figcaption>
+								
+							</figure>
+							{% endfor %}
+							
+							
+						</div>
+						<!-- End Blog Content -->
+					</div>
+				</div>
+				<!--End Blog Content-->
+			</div>
+		</div>
+		<!--End Main Content-->
+	</div>
+	<!-- End Body Container -->
+	{% endspaceless %}
+	{% endblock content %}	
+	{% block extra_body %}{% spaceless %}
+	
+	
+	
+	{% endspaceless %}
+{% endblock %}

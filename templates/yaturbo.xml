@@ -1,0 +1,53 @@
+<rss xmlns:yandex="http://news.yandex.ru" xmlns:media="http://search.yahoo.com/mrss/" xmlns:turbo="http://turbo.yandex.ru" version="2.0">
+    <channel>
+        <title>DOMOPROEKTOR.RU - ПРОЕКТИРУЕМ ДОМ</title>
+        <link>https://domoproektor.ru/</link>
+        <description>Проектирование и строительство дома</description>
+        <turbo:analytics type="Yandex" id="95549032"></turbo:analytics>
+		
+        <yandex:related type="infinity">
+            <link url="https://domoproektor.ru/posts/inzhenernye-kommunikacii/">Инженерные коммуникации</link>
+			<link url="https://domoproektor.ru/posts/blagoustrojstvo-uchastka/">Благоустройство участка</link>
+			<link url="https://domoproektor.ru/posts/vnutrennyaya-otdelka/">Внутренняя отделка</link>
+			<link url="https://domoproektor.ru/posts/dlya-doma-i-sada/">Для дома и сада</link>
+			<link url="https://domoproektor.ru/posts/tehnologii-i-materialy/">Технологии и материалы</link>
+			<link url="https://domoproektor.ru/posts/osteklenie/">Остекление</link>
+			<link url="https://domoproektor.ru/posts/poleznaya-informaciya/">Полезная информация</link>
+			<link url="https://domoproektor.ru/posts/vneshnyaya-otdelka/">Внешняя отделка</link>
+			<link url="https://domoproektor.ru/posts/malye-formy/">Малые формы</link>
+			<link url="https://domoproektor.ru/posts/articles/">Статьи</link>
+			<link url="https://domoproektor.ru/posts/krovlya/">Кровля</link>
+			<link url="https://domoproektor.ru/posts/zemlya/">Земля</link>
+			<link url="https://domoproektor.ru/posts/fundament/">Фундамент</link>
+		</yandex:related>
+		
+		{% for item in turbopages %}
+        <item turbo="true">
+            <turbo:extendedHtml>true</turbo:extendedHtml>
+            <link>https://{{ request.get_host }}{{ item.get_absolute_url }}</link>
+            <author>DOMOPROEKTOR</author>
+            <category>Советы</category>
+            <pubDate>{{ item.publish_date|date:'c' }}</pubDate>
+            <turbo:content>
+                <![CDATA[
+                    <header>
+					<h1>{{ item.title }}</h1>
+					<p>{{ item.shortdescription }}</p>
+					<figure>
+					<img src="https://{{ request.get_host }}/{{ item.image }}">
+					</figure>					
+                    </header>
+					{{ item.description|safe }}
+				]]>
+			</turbo:content>			
+		</item>
+		{% endfor %}
+		
+	</channel>
+</rss>
+
+
+
+
+
+{{ urlset }}

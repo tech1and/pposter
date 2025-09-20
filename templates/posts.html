@@ -1,0 +1,186 @@
+{% extends "base.html" %}
+{% load mptt_tags %}
+{% block head_title %}{% now "Y" as year %}{% now "F" as month %}
+<title>{% if cat_title.metatitle %} {{ cat_title.metatitle }} {% else %} {{ cat_title.title|title }} - {{ month }} {{ year }} {% endif %}</title>
+
+
+{% endblock %}
+{% block meta_descriprion %}{% now "Y" as year %}{% now "F" as month %}
+<meta name="description" content="{% if cat_title.metadescription %} {{ cat_title.metadescription }} {% else %} Ищете информацию про {{ cat_title.title }}? Подборка свежих статей за {{ month }} {{ year }} года поможет разобраться в теме!{% endif %}">{% endblock %}
+{% block seo_schema %}
+{% now "Y" as year %}
+{% now "E" as month %}
+<meta name="keywords" content="{{ cat_title.title|title }} {{request.site.name}}, {% if category_children %}{% for item in category_children %}{{ item.title }}, {% endfor %}{% else %}{% for item in category_descendants %}{{ item.title }}, {% endfor %}{% endif %}">
+<meta name="robots" content="noindex, follow">
+
+<link rel="canonical" href="https://{{ request.get_host }}{{ cat_title.get_absolute_url }}">
+
+
+<meta property="og:url" content="{{ cat_title.get_absolute_url }}">
+<meta property="og:type" content="website">
+<meta property="og:title" content="{% if cat_title.metatitle %} {{ cat_title.metatitle }} {% else %} {{ cat_title.title|title }} - {{ month }} {{ year }} {% endif %}">
+<meta property="og:image" content="{{ object.image.url }}">
+<meta property="og:description" content="{% if cat_title.metadescription %} {{ cat_title.metadescription }} {% else %} Ищете информацию про {{ cat_title.title }}? Подборка свежих статей за {{ month }} {{ year }} года поможет разобраться в теме!{% endif %}">
+<meta property="og:site_name" content="{{ request.get_host }}">
+
+<script async src="https://aflt.market.yandex.ru/widget/script/api"></script>
+
+
+<script type="application/ld+json"> {"@context": "https://schema.org","@type": "BreadcrumbList","itemListElement": [{"@type": "ListItem","position": 0,"name": "Главная","item": "https://{{ request.get_host }}"},{% for category in category_bread_crumbs %}{"@type": "ListItem","position": {{ forloop.counter }},"name": "{{ category.title }}","item": "https://{{ request.get_host }}{{ category.get_absolute_url }}"} {% if forloop.last %}{% else %},{% endif %}{% endfor %}]}</script>
+{% comment %}
+<script type="application/ld+json">{"@context": "https://schema.org","@type": "ItemList","url": "https://{{ request.get_host }}{{ cat_title.get_absolute_url }}","numberOfItems": "{{ totalItems.page.totalItems }}","itemListElement": [{% for item in market %} { "@type": "Product", "image": "{{ item.offer.photo.url }}", "url": "{{ item.offer.url|cut:'https://pokupki.market.yandex.ru' }}", "name": "{{ item.name|cut:'&#34;'|cut:',' }}","description": "{{ item.offer.description|safe|cut:'\n'|cut:'&#34;' }}","sku": "{{ item.offer.sku }}", "offers": { "@type": "Offer", "price": "{% if item.price.min %}{{ item.price.min|floatformat:0 }} ₽{% else %}{{ item.offer.price.value|floatformat:0 }} ₽{% endif %}"}}{% if forloop.last %}{% else %},{% endif %}{% endfor %}]}</script>
+{% endcomment %}
+
+{% endblock %}
+
+
+{% block body_type %}
+<body class="template-product product-layout4">
+	{% endblock %}
+	
+	{% block under_search_form_area %}
+	{% autoescape off %}
+	{{ cat_title.tag_tiling_search }}
+	{% endautoescape %}
+	{% endblock under_search_form_area %}
+	{% block breadcrumbs %}
+	
+	
+	
+	
+	
+	{% endblock breadcrumbs %}
+	{% block content %}
+	{% now "Y" as year %}{% now "E" as month %}
+	
+	{% if user.is_authenticated %}{% endif %}
+	
+	
+	
+	
+	<div id="page-content"> 
+		
+		<div class="page-header text-center">
+			<div class="container">
+				<div class="row">
+					<div class="col-12 col-sm-12 col-md-12 col-lg-12 d-flex justify-content-between align-items-center">
+						<div class="breadcrumbs">
+							<a href="/">Главная</a>
+							{% for category in category_bread_crumbs %}
+							<span class="title">
+								<i class="icon anm anm-angle-right-l"></i>
+								<a href="{{ category.get_absolute_url }}">{{ category.title }}</a>
+							</span>
+							{% endfor %}
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		
+		
+		
+		<div class="container">
+			
+			<div class="section-header">
+				<h1>{{ cat_title.title|title }}</h1>
+			</div>
+			
+			
+			
+			
+			
+			<div class="blog-grid-view">
+				<div class="row col-row row-cols-lg-3 row-cols-sm-2 row-cols-1">
+					
+					{% for item in object_list %}
+					<div class="blog-item col-item">
+						<div class="blog-article zoomscal-hov">
+						{% comment %}
+							<div class="blog-img">
+								<a class="featured-image rounded-0 zoom-scal" href="{{ item.get_absolute_url }}">
+									
+									{% if item.image %}
+									<img class="rounded-0 blur-up lazyload" data-src="{{ item.image.url }}" src="{{ item.image.url }}" alt="{{ item.title }}" width="740" height="410" />
+									{% else %}
+									
+									<img class="rounded-0 blur-up lazyload" data-src="/static/img/noimage.jpg" src="/static/img/noimage.jpg" alt="{{ item.title }}" width="740" height="410" />
+									
+									{% endif %}
+									
+									
+								</a>
+							</div>
+							{% endcomment %}
+							<div class="blog-content">
+								<span class="h3">
+									<a href="{{ item.get_absolute_url }}">{{ item.title|safe }}</a>
+								</span>
+								<ul class="publish-detail d-flex-wrap">                      
+									
+									<li><i class="icon anm anm-clock-r"></i> <time datetime="{{ item.publish_date|date:'c' }}">{{ item.publish_date }}</time></li>
+									<li><i class="icon anm anm-eye-l"></i>{{ item.views }} <span class="mx-2 views"> </span></li>
+								</ul>
+								<p class="content text-truncate">{{ item.shortdescription|striptags }}</p>
+								<a href="{{ item.get_absolute_url }}" class="btn btn-secondary btn-sm goit"></a>
+							</div>
+						</div>
+					</div>
+					{% if forloop.counter|divisibleby:4 %}
+					<div class="blog-item col-item">
+					<div id="yandex_rtb_R-A-2363917-2-{{ forloop.counter }}" style="height:300px"></div>
+					<script>window.yaContextCb.push(()=>{
+						Ya.Context.AdvManager.render({
+							renderTo: 'yandex_rtb_R-A-2363917-2-{{ forloop.counter }}',
+							blockId: 'R-A-2363917-2',
+							pageNumber: {{ forloop.counter }}
+						})
+					})</script>
+					</div>
+					{% endif %}
+					{% endfor %}
+					
+					
+				</div>
+				
+				
+				<nav class="clearfix pagination-bottom">
+					<ul class="pagination justify-content-center">
+						{% if page_obj.has_previous %}
+						<li class="page-item disabled"><a class="page-link" href="?page={{ page_obj.previous_page_number }}"><i class="icon anm anm-angle-left-l"></i></a></li>
+						{% endif %}
+						<li class="page-item active"><a class="page-link" href="?page={{ page_obj.number }}">{{ page_obj.number }} </a></li>
+						
+						{% if page_obj.has_next %}
+						<li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}"><i class="icon anm anm-angle-right-l"></i></a></li>
+						{% endif %}
+					</ul>
+				</nav>
+				
+				
+				
+				
+				
+				
+				
+				
+				
+			</div>
+			</hr>
+			<div class="infolinks w-100 d-flex-center justify-content-center mb-3">
+				{% for item in cats_all %}
+				<a class="text-link wishlist" href="{{ item.get_absolute_url }}"> <span>{{ item.title }}</span></a>
+				{% endfor %}	
+				
+			</div>
+			
+			
+			
+		</div>
+		
+	</div>
+	
+	
+	
+{% endblock content %}						

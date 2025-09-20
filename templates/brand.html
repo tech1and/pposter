@@ -1,0 +1,297 @@
+{% extends "base.html" %}
+{% load static mptt_tags clean_title user_agents %}
+{% block head_title %}{% now "Y" as year %}{% now "E" as month %}
+<title>{% if object.metatitle %}{{ object.metatitle|title }}  {{ year }}{% else %} {{ object.title|title }} Официальный Сайт, Каталог Товаров, Цены {{ month }} {{ year }}, Отзывы {% endif %}</title>
+{% endblock %}
+{% block meta_descriprion %}{% now "Y" as year %}{% now "E" as month %}
+<meta name="description" content="{% if object.metadescription %}{{ object.metadescription }} {% else %} 
+Ищете каталог товаров {{ object.title|title }}? Официальный сайт {{ object.title|title }} снизил цены на {% for item in brand_seo %}{{ item.name|clean_name }}, {% endfor %} до конца {{ month }} {{ year }} года. Отзывы помогут сделать выбор.{% endif %}">
+<meta name="keywords" content="{% for item in plitka_bott %}{{ item }},{% endfor %}">
+{% endblock %}
+{% block seo_schema %}{% now "Y" as year %}{% now "E" as month %}
+<meta name="referrer" content="no-referrer-when-downgrade">
+
+{% if object.description %}
+
+<meta name="robots" content="index,follow">
+{% else %}
+<meta name="robots" content="noindex,follow">
+{% endif %}
+
+<link rel="canonical" href="https://{{ request.get_host }}{{ object.get_absolute_url }}" />
+<script type="application/ld+json"> {"@context": "https://schema.org","@type": "BreadcrumbList","itemListElement": [{"@type": "ListItem","position": 0,"name": "Главная","item": "https://{{ request.get_host }}"},{% for category in category_bread_crumbs %}{"@type": "ListItem","position": {{ forloop.counter }},"name": "{{ category.title }}","item": "https://{{ request.get_host }}{{ category.get_absolute_url }}"} {% if forloop.last %}{% else %},{% endif %}{% endfor %}]}</script>
+<meta property="og:url" content="https://{{ request.get_host }}{{ object.get_absolute_url }}">
+<meta property="og:type" content="website">
+<meta property="og:title" content="{{ object.title|title }}: Каталог, Цены и Отзывы {{ month }} {{ year }}">
+<meta property="og:image" content="https://{{ request.get_host }}/{{ object.image }}">
+<meta property="og:description" content="Смотрите каталог {{ object.title|title }} {{ month }} {{ year }} года. Актуальные цены, скидки, акции и широкий ассортимент товаров на официальном сайте!">
+<meta property="og:site_name" content="InnovateHome.ru">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:site" content="@InnovateHome">
+<meta name="twitter:creator" content="@individual_account">
+<meta name="twitter:url" content="https://{{ request.get_host }}{{ object.get_absolute_url }}">
+<meta name="twitter:title" content="{{ object.title|title }}: Цены, Отзывы ({{ month }} {{ year }})">
+<meta name="twitter:description" content=" Ищете {{ object.title|title }}? Каталог товаров, цены, акции {{ month }} {{ year }}. Отзывы помогу в выборе! ">
+<meta name="twitter:image" content="https://{{ request.get_host }}/{{ object.image }}">
+
+<style>	#ymap {width: 100%; height: 300px; padding: 0; margin: 0;}</style>
+{% endblock %}
+{% block extra_head %}
+
+{% endblock %}
+{% block body_type %}
+<body class="shop-page shop-left-sidebar-page">
+	{% endblock %}
+	{% block content %}{% now "Y" as year %}{% now "E" as month %}
+	<div id="page-content"> 
+		<div class="page-header text-center">
+			<div class="container">
+				<div class="row">
+					<div class="col-12 col-sm-12 col-md-12 col-lg-12 d-flex justify-content-between align-items-center">
+						
+						<div class="breadcrumbs">
+							<a href="/">Главная</a>
+							{% for category in category_bread_crumbs %}
+							<span class="title">
+								<i class="icon anm anm-angle-right-l"></i>
+								<a href="{{ category.get_absolute_url }}">{{ category.title }}</a>
+							</span>
+							{% endfor %}
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="container">
+			<div class="row">
+				<div class="col-12 col-sm-12 col-md-12 col-lg-3 sidebar sidebar-bg">
+					<div class="sidebar-tags sidebar-sticky clearfix">
+						
+					</div>
+				</div>
+				<div class="col-12 col-sm-12 col-md-12 col-lg-9 main-col tab-slider-product">
+					<div class="page-title"><h1>{{ object.title }} каталог товаров и цены {{ month }} {{ year }}</h1></div>
+					
+					<p class="text-small">В каталоге товаров бренда {{ object.title|title }} до конца {{ month }} {{ year }} действует скидка на следующие товары: {% for item in brand_seo %}{{ item.name|clean_name }} {% endfor %}</p>
+					
+					
+					<div class="tabs-listing">
+						<ul class="nav nav-tabs style1 justify-content-center" id="productTabs" role="tablist">
+							<li class="nav-item" role="presentation">
+								<button class="nav-link head-font active" id="catalog-tab" data-bs-toggle="tab" data-bs-target="#catalog" type="button" role="tab" aria-controls="catalog" aria-selected="true">Каталог</button>
+							</li>
+							<li class="nav-item" role="presentation">
+								<button class="nav-link head-font" id="map-tab" data-bs-toggle="tab" data-bs-target="#map" type="button" role="tab" aria-controls="map" aria-selected="false">Карта</button>
+							</li>
+							<li class="nav-item" role="presentation">
+								<button class="nav-link head-font" id="contacts-tab" data-bs-toggle="tab" data-bs-target="#contacts" type="button" role="tab" aria-controls="contacts" aria-selected="false">Контакты</button>
+							</li>
+						</ul>
+						
+						<div class="tab-content" id="productTabsContent">
+							<div class="tab-pane show active" id="catalog" role="tabpanel" aria-labelledby="catalog-tab">
+								<div class="toolbar toolbar-wrapper shop-toolbar">
+									<div class="row align-items-center">
+										<div class="col-4 col-sm-2 col-md-4 col-lg-4 text-left filters-toolbar-item d-flex order-1 order-sm-0">
+											<button type="button" class="btn btn-filter icon anm anm-sliders-hr d-inline-flex d-lg-none me-2"><span class="d-none">Filter</span></button>
+											<div class="filters-item d-flex align-items-center">
+												<label class="mb-0 me-2 d-none d-lg-inline-block">Вид:</label>
+												<div class="grid-options view-mode d-flex">
+													<a class="icon-mode mode-list d-block" data-col="1"></a>
+													<a class="icon-mode mode-grid grid-2 d-block" data-col="2"></a>
+													<a class="icon-mode mode-grid grid-3 d-md-block" data-col="3"></a>
+													<a class="icon-mode mode-grid grid-4 d-lg-block active" data-col="4"></a>
+												</div>
+											</div>
+										</div>
+										<div class="col-12 col-sm-4 col-md-4 col-lg-4 text-center product-count order-0 order-md-1 mb-3 mb-sm-0">
+											<span class="toolbar-product-count"></span>
+										</div>
+										<div class="col-8 col-sm-6 col-md-4 col-lg-4 text-right ">
+											
+										</div>
+									</div>
+								</div>
+								
+								<div class="grid-products grid-view-items">
+									<div class="section-header" id="header_1">
+										
+										
+										
+									</div>
+									
+									<div class="row col-row product-options row-cols-lg-3 row-cols-md-3 row-cols-sm-3 row-cols-1">
+										
+										
+										
+										
+										{% for item in brand %}   
+										<div class="item col-item">
+											<div class="product-box">
+												<div class="product-image">
+													<a href="/search/q/?q={{ item.name|clean_name }}" rel="nofollow" target="_blank" class="product-img rounded-0">
+														<img class="primary rounded-0 blur-up lazyload" data-src="{{ item.offer.photo.url }}" src="{{ item.offer.photo.url }}" alt="{{ item.name|clean_name }}"  width="625" height="808" />
+														{% if item.offer.photos.1.url %}
+														
+														<img class="hover rounded-0 blur-up lazyload imgcat" data-src="{{ item.offer.photos.1.url }}" src="{{ item.offer.photos.1.url }}" width="625" height="808" />
+														{% else %}
+														<img class="hover rounded-0 blur-up lazyload imgcat" data-src="{{ item.offer.photo.url }}" src="{{ item.offer.photo.url }}" width="625" height="808" />
+														
+														{% endif %}
+													</a>
+													
+												</div>
+												<div class="product-details text-center product-single-meta">
+													<div class="product-vendor"></div>
+													<div class="product-name">
+														<a href="{{ item.get_absolute_url }}">{{ item.name|clean_name }}</a>
+													</div>
+													<div class="product-price">
+														<span class="price h2">{% if item.price.min %}{% widthratio item.price.min 6 1 %} ₽{% else %} {% widthratio item.offer.price.value 6 1 %} ₽{% endif %}</span>
+													</div>
+													<div class="product-review">
+														
+														<span class="caption hidden ms-1">{{ item.reviewCount }} </span>
+													</div>
+												</div>
+											</div>
+										</div>
+										{% if request|is_mobile %}
+										{% if forloop.counter|divisibleby:3 %}
+										
+										{% endif %}
+										{% else %}
+										{% if forloop.counter|divisibleby:6 %}
+										
+										{% endif %}
+										{% endif %}
+										{% endfor %}
+									</div>
+									
+									
+									
+									
+									
+								</div>
+								
+								
+							</div>
+							
+							<div class="tab-pane" id="map" role="tabpanel" aria-labelledby="map-tab">
+								<h3>{{ object.title }} на карте</h3>
+								<div id="ymap" class="card"></div>
+								<script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU&amp;apikey=4e55d5c8-94be-4298-897d-147fa27e292c"></script>
+								<script>function init() {var myMap = new ymaps.Map('ymap', {center: [55.74, 37.58],zoom: 13,controls: []});var searchControl = new ymaps.control.SearchControl({options: {provider: 'yandex#search'}});myMap.controls.add(searchControl);searchControl.search('{{ object.title }}');}ymaps.ready(init);</script> 
+								
+							</div>
+							
+							<div class="tab-pane" id="contacts" role="tabpanel" aria-labelledby="contacts-tab">
+								
+								<div class="contact-information section pt-0">
+									<div class="row col-row row-cols-lg-3 row-cols-md-3 row-cols-sm-2 row-cols-2 text-center text-break">
+										<div class="icon-box col-item">
+											<div class="bg-block rounded-0 h-100">
+												<div class="icon-box-icon icon-email mb-3">
+													<i class="fs-1 icon anm anm-envelope-l"></i>
+												</div>
+												<div class="icon-box-content">
+													<h3 class="icon-box-title mb-2" data-heading-tag="H3">E-mail</h3>
+													<p><a href="#">{{ object.email }}</a></p>
+													<div class="text-center">
+														<a rel="nofollow" target="_blank" href="#" class="mx-2">
+															<i class="fs-1 icon anm anm-telegram"></i>
+														</a>
+														<a rel="nofollow" target="_blank"href="#" class="">
+															<img src="/static/img/vk.png">
+														</a>
+														
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="icon-box col-item">
+											<div class="bg-block rounded-0 h-100">
+												<div class="icon-box-icon icon-email mb-3">
+													<i class="fs-1 icon anm anm-phone-call-l"></i>
+												</div>
+												<div class="icon-box-content">
+													<h3 class="icon-box-title mb-2" data-heading-tag="H3">Телефон</h3>
+													
+												</div>
+											</div>
+										</div>
+										
+										<div class="icon-box col-item">
+											<div class="bg-block rounded-0 h-100">
+												<div class="icon-box-icon icon-email mb-3">
+													<i class="fs-1 icon anm anm-map-marker-al"></i>
+												</div>
+												<div class="icon-box-content">
+													<h3 class="icon-box-title mb-2" data-heading-tag="H3">Адрес</h3>
+													<p>{{ object.adres|safe }}</p>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								
+								<h3>Время работы</h3>
+								{{ object.working_hours|safe }}
+								
+								
+								
+							</div>
+						</div>
+					</div>
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					<div class="about-details px-50 py-5">
+						{{ object.description|safe }}
+					</div>
+					<div class="sidebar-widget clearfix tags-clouds">
+						
+						<div class="widget-content">
+							<ul class="tags-list d-flex-wrap">
+								{% for item in plitka_bott %}
+								<li class="item"><a class="rounded-3" href="#">{{ item }}</a></li>
+								{% endfor %}     
+							</ul>
+						</div>
+					</div>
+				</div>
+				
+				
+				
+				
+				
+				
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock content %}	
+{% block floorAd %}			
+{% endblock %}
+{% block extra_body %}
+{% endblock %}		

@@ -1,0 +1,188 @@
+{% extends "base.html" %}
+{% load mptt_tags %}
+{% block head_title %}{% now "Y" as year %}{% now "F" as month %}
+<title>{% if cat_title.metatitle %} {{ cat_title.metatitle }} {% else %} {{ cat_title.title|title }} {{ year }}) {% endif %}</title>
+
+
+{% endblock %}
+{% block meta_descriprion %}{% now "Y" as year %}{% now "F" as month %}
+<meta name="description" content="{% if cat_title.metadescription %} {{ cat_title.metadescription }} {% else %}Ищете {{ cat_title.title }}? Предлагаем изучить {{ cat_title.title }} за {{ month }} {{ year }} года.{% endif %}">{% endblock %}
+{% block seo_schema %}
+{% now "Y" as year %}
+{% now "E" as month %}
+<meta name="keywords" content="{{ cat_title.title|title }} {{request.site.name}}, {% if category_children %}{% for item in category_children %}{{ item.title }}, {% endfor %}{% else %}{% for item in category_descendants %}{{ item.title }}, {% endfor %}{% endif %}">
+<meta name="robots" content="index, follow">
+
+<link rel="canonical" href="https://{{ request.get_host }}{{ cat_title.get_absolute_url }}">
+
+
+
+<script async src="https://aflt.market.yandex.ru/widget/script/api"></script>
+
+
+<script type="application/ld+json"> {"@context": "https://schema.org","@type": "BreadcrumbList","itemListElement": [{"@type": "ListItem","position": 0,"name": "Главная","item": "https://{{ request.get_host }}"},{% for category in category_bread_crumbs %}{"@type": "ListItem","position": {{ forloop.counter }},"name": "{{ category.title }}","item": "https://{{ request.get_host }}{{ category.get_absolute_url }}"} {% if forloop.last %}{% else %},{% endif %}{% endfor %}]}</script>
+
+
+{% endblock %}
+
+
+{% block body_type %}
+<body class="shop-page sidebar-filter shop-masonry-grid-page">
+	{% endblock %}
+	
+	{% block under_search_form_area %}
+	{% autoescape off %}
+	{{ cat_title.tag_tiling_search }}
+	{% endautoescape %}
+	{% endblock under_search_form_area %}
+	{% block breadcrumbs %}
+	
+	
+	
+	
+	
+	{% endblock breadcrumbs %}
+	{% block content %}
+	{% now "Y" as year %}{% now "E" as month %}
+	
+	{% if user.is_authenticated %}{% endif %}
+	
+	
+	
+	
+	<div id="page-content"> 
+		
+		<div class="page-header text-center">
+			<div class="container">
+				<div class="row">
+					<div class="col-12 col-sm-12 col-md-12 col-lg-12 d-flex justify-content-between align-items-center">
+						<div class="breadcrumbs">
+							<a href="/">Главная</a>
+							{% for category in category_bread_crumbs %}
+							<span class="title">
+								<i class="icon anm anm-angle-right-l"></i>
+								<a href="{{ category.get_absolute_url }}">{{ category.title }}</a>
+							</span>
+							{% endfor %}
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		
+		
+		
+		<div class="container">
+			
+			<div class="section-header">
+				<h1>{{ cat_title.title|title }}</h1>
+			</div>
+			
+			
+			
+			
+			
+			
+			
+			<div class="toolbar toolbar-wrapper shop-toolbar">
+				<div class="row align-items-center">
+					<div class="col-4 col-sm-2 col-md-4 col-lg-4 text-left filters-toolbar-item d-flex order-1 order-sm-0">
+						<button type="button" class="btn btn-filter text icon anm anm-sliders-hr d-inline-flex me-2 me-lg-3"> Фильтр</button>                                
+					</div>
+					<div class="col-12 col-sm-4 col-md-4 col-lg-4 text-center product-count order-0 order-md-1 mb-3 mb-sm-0">
+						
+					</div>
+					
+					<div class="col-8 col-sm-6 col-md-4 col-lg-4 text-right filters-toolbar-item d-flex justify-content-end order-2 order-sm-2">
+						
+						<div class="filters-item d-flex align-items-center ms-2 ms-lg-3">
+							<
+						</div>
+					</div>
+				</div>
+			</div>
+			
+			
+			<div class="row">
+				
+				<div class="col-12 col-sm-12 col-md-12 col-lg-3 sidebar sidebar-bg filterbar">
+					<div class="closeFilter"><i class="icon anm anm-times-r"></i></div>
+					<div class="sidebar-tags clearfix">
+						
+						
+						<div class="sidebar-widget filterBox filter-widget">
+							<div class="widget-title h2">По размеру </div>
+							<div class="widget-content filter-size filterDD">
+							</div>
+						</div>
+						
+						<div class="sidebar-widget clearfix categories filterBox filter-widget">
+							
+							<div class="widget-content filterDD">
+								<ul class="sidebar-categories scrollspy morelist clearfix">
+									{% if category_children %}
+									{% for item in category_children %}
+									<li class="lvl1 more-item"><a href="{{ item.get_absolute_url }}" class="site-nav">{{ item.menutitle|default:item.title|title }} </a></li>
+									{% endfor %}
+									{% else %}
+									{% for item in category_descendants %}
+									<li class="lvl1 more-item"><a href="{{ item.get_absolute_url }}" class="site-nav">{{ item.menutitle|default:item.title|title }} </a></li>
+									{% endfor %}
+									{% endif %}
+								</ul>
+							</div>
+						</div>
+					
+					
+				</div>
+			</div>
+			
+			
+			<div class="col-12 col-sm-12 col-md-12 col-lg-12 main-col">
+			
+			<ul class="list-styled town">
+					{% for item in object_list %}
+					<li><a href="{{ item.get_absolute_url }}">{{ item.title }}</a></li>
+					{% endfor %}	
+					</ul>
+			
+			
+				
+				
+				<div class="my-3" id="yandex_rtb_R-A-2363917-2-53" style="height:300px"></div>
+				<script>window.yaContextCb.push(()=>{
+					Ya.Context.AdvManager.render({
+						renderTo: 'yandex_rtb_R-A-2363917-2-53',
+						blockId: 'R-A-2363917-2',
+						pageNumber: 53
+					})
+				})</script>
+				<nav class="clearfix pagination-bottom">
+					<ul class="pagination justify-content-center">
+						{% if page_obj.has_previous %}
+						<li class="page-item disabled"><a class="page-link" href="?page={{ page_obj.previous_page_number }}"><i class="icon anm anm-angle-left-l"></i></a></li>
+						{% endif %}
+						<li class="page-item active"><a class="page-link" href="?page={{ page_obj.number }}">{{ page_obj.number }} </a></li>
+						
+						{% if page_obj.has_next %}
+						<li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}"><i class="icon anm anm-angle-right-l"></i></a></li>
+						{% endif %}
+					</ul>
+				</nav>
+				
+				
+				
+			</div>
+			
+		</div>
+		
+		
+		
+	</div>
+	
+</div>
+
+
+
+{% endblock content %}						

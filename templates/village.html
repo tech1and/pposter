@@ -1,0 +1,659 @@
+{% extends "base.html" %}
+{% load static mptt_tags %}
+{% block head_title %}{% now "Y" as year %}{% now "E" as month %}
+<title>{{ object.title|title }} - Официальный Сайт, Цены {{ month }} {{ year }}, Фото, Генплан, Объект На Карте, Участки В КП
+	
+	
+	
+	
+	
+	</title>
+{% endblock %}
+{% block meta_descriprion %}{% now "Y" as year %}{% now "E" as month %}
+<meta name="description" content="Официальный сайт коттеджного поселка {{ object.title|cut:'Коттеджный поселок ' }} предлагает актуальные цены на {{ month }} {{ year }}, фото, генплан и участки на карте. Выберите свой идеальный загородный дом в Подмосковье. Рассмотрите все варианты: готовые дома, участки без подряда, выгодные предложения. Оцените инфраструктуру, расположение и доступность поселка.">
+<meta name="keywords" content="коттеджный поселок {{ object.title|cut:'Коттеджный поселок ' }}, кп {{ object.title|cut:'Коттеджный поселок ' }}, {{ object.title|cut:'Коттеджный поселок ' }} поселок, участки в коттеджном поселке {{ object.title|cut:'Коттеджный поселок ' }}, цены на участки, генплан коттеджного поселка {{ object.title|cut:'Коттеджный поселок ' }}, фото коттеджного поселка {{ object.title|cut:'Коттеджный поселок ' }}, купить участок в подмосковье, загородные дома, коттеджи подмосковье, участки без подряда {{ object.title|cut:'Коттеджный поселок ' }}, поселок с коммуникациями {{ object.title|cut:'Коттеджный поселок ' }}, дом в коттеджном поселке {{ object.title|cut:'Коттеджный поселок ' }}, земельные участки, цены на коттеджи, официальный сайт, новостройки подмосковья, загородная недвижимость, недвижимость в подмосковье, поселок {{ object.title|cut:'Коттеджный поселок ' }} на карте, купить дом в кп {{ object.title|cut:'Коттеджный поселок ' }}, инфраструктура поселка {{ object.title|cut:'Коттеджный поселок ' }}, выгодные предложения, купить землю, жизнь за городом, подмосковный поселок {{ object.title|cut:'Коттеджный поселок ' }}">
+{% endblock %}
+{% block seo_schema %}{% now "Y" as year %}{% now "E" as month %}
+<meta name="referrer" content="no-referrer-when-downgrade">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<link rel="canonical" href="https://{{ request.get_host }}{{ object.get_absolute_url }}" />
+
+
+<script type="application/ld+json"> {"@context": "https://schema.org","@type": "BreadcrumbList","itemListElement": [{"@type": "ListItem","position": 0,"name": "Главная","item": "https://{{ request.get_host }}"},{% for category in category_bread_crumbs %}{"@type": "ListItem","position": {{ forloop.counter }},"name": "{{ category.title }}","item": "https://{{ request.get_host }}{{ category.get_absolute_url }}"} {% if forloop.last %}{% else %},{% endif %}{% endfor %}]}</script>
+
+
+<meta property="og:url" content="https://{{ request.get_host }}{{ object.get_absolute_url }}">
+<meta property="og:type" content="website">
+<meta property="og:title" content="КП {{ object.title|cut:'Коттеджный поселок ' }}: Загородная Жизнь Мечты в Подмосковье">
+<meta property="og:image" content="https://{{ request.get_host }}/{{ object.image }}">
+<meta property="og:description" content="Откройте для себя коттеджный поселок {{ object.title|cut:'Коттеджный поселок ' }}! На официальном сайте вы найдете актуальные цены на {{ month }} {{ year }}, фото, генплан, и все необходимые сведения для выбора участка или дома. Выгодные предложения, современная инфраструктура и живописные окрестности.">
+<meta property="og:site_name" content="DomoStr0y.ru">
+
+<meta name="twitter:card" content="summary">
+<meta name="twitter:site" content="@DomoStr0y">
+<meta name="twitter:creator" content="@individual_account">
+<meta name="twitter:url" content="https://{{ request.get_host }}{{ object.get_absolute_url }}">
+<meta name="twitter:title" content="Коттеджный Поселок {{ object.title|cut:'Коттеджный поселок ' }}: Участки и Дома в Подмосковье">
+<meta name="twitter:description" content="КП {{ object.title|cut:'Коттеджный поселок ' }}: актуальные цены на участки и дома в Подмосковье ({{ month }} {{ year }}), фото, генплан. Удобное расположение, развитая инфраструктура. Найдите свой загородный дом мечты! #коттеджныйпоселок #подмосковье #недвижимость">
+<meta name="twitter:image" content="https://{{ request.get_host }}/{{ object.image }}">
+
+
+
+<script type="application/ld+json">{"@context": "https://schema.org","@type": "LocalBusiness","name": "{{ object.title|title }}","description": "{{ object.title|title }} предлагает участки и дома в живописном Подмосковье. На официальном сайте вы найдете генплан, фото, цены {{ month }} {{ year }} и всю необходимую информацию.","image": "https://{{ request.get_host }}/{{ object.image }}","url": "https://{{ request.get_host }}","address": {"@type": "PostalAddress","streetAddress": "{{ object.metadescription|cut:', описание поселка с генпланом на карте, фото, визуализация участка' }}","addressLocality": "Подмосковье","postalCode": "390000","addressCountry": "RU"},"geo": {"@type": "GeoCoordinates","latitude": "55.52661","longitude": "37.88518"},"openingHoursSpecification": [{"@type": "OpeningHoursSpecification","dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"],"opens": "09:00","closes": "18:00"}],"telephone": "+7800","priceRange": "{{ object.metadescription|cut:', описание поселка с генпланом на карте, фото, визуализация участка' }}","sameAs": ["{{ object.source }}"]}</script>
+
+
+
+
+<style>	#map {width: 100%; height: 400px; padding: 0; margin: 0;}</style>
+{% endblock %}
+{% block extra_head %}
+{% endblock %}
+{% block body_type %}
+<body class="template-product product-layout4 sidebar-filter shop-page shop-masonry-grid-page">
+	{% endblock %}
+	{% block content %}{% now "Y" as year %}{% now "E" as month %}
+	<div id="page-content"> 
+		<div class="page-header text-center">
+			<div class="container">
+				<div class="row">
+					<div class="col-12 col-sm-12 col-md-12 col-lg-12 d-flex justify-content-between align-items-center">
+						<button type="button" class="btn btn-filter text icon anm anm-sliders-hr d-inline-flex me-2 me-lg-3"> Фильтр</button>
+						<div class="breadcrumbs">
+							<a href="/">Главная</a>
+							{% for category in category_bread_crumbs %}
+							<span class="title">
+								<i class="icon anm anm-angle-right-l"></i>
+								<a href="{{ category.get_absolute_url }}">{{ category.title }}</a>
+							</span>
+							{% endfor %}
+							
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="container">     
+			<div class="product-single">
+				<h1 class="product-main-title h2">{{ object.title }}</h1>
+				<p>{{ object.metadescription|cut:', описание поселка с генпланом на карте, фото, визуализация участка' }}</p>
+				<div class="product-review d-flex-center mb-3">
+					<div class="reviewStar d-flex-center"><i class="icon anm anm-star"></i><i class="icon anm anm-star"></i><i class="icon anm anm-star"></i><i class="icon anm anm-star"></i><i class="icon anm anm-star-o"></i><span class="caption ms-2">{{ object.views }} отзывов</span></div>
+					<a class="mx-3 bottom-btn btn btn-gray btn-sm" href="#revs">Оставить отзыв</a>
+					
+				</div>
+				<div class="row">
+					<div class="col-lg-6 col-md-6 col-sm-12 col-12 product-layout-img mb-4 mb-md-0">
+						<div class="product-details-img position-relative">
+							{% if object.image %}
+							<div class="zoompro-wrap mb-3">
+								<div class="zoompro-span">
+									<img class="zoompro" src="{{ object.image.url }}" data-zoom-image="{{ object.image.url }}"  alt="{{ object.title }} фото" width="625" height="808" />
+								</div>
+							</div>
+							{% else %}
+							<div class="zoompro-wrap mb-3">
+								<div class="zoompro-span">
+									<img class="zoompro" src="/static/img/noimage.jpg" data-zoom-image="/static/img/noimage.jpg"  alt="{{ object.title }} фото" width="625" height="808" />
+								</div>
+							</div>
+							
+							{% endif %}
+							<div class="zoompro-wrap mb-3">
+								<div class="zoompro-span">
+									<script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU&amp;apikey=4e55d5c8-94be-4298-897d-147fa27e292c"></script>
+									<div id="map"></div>
+									<script>function init() {var myMap = new ymaps.Map('map', {center: [55.74, 37.58],zoom: 13,controls: []});var searchControl = new ymaps.control.SearchControl({options: {provider: 'yandex#search'}});myMap.controls.add(searchControl);searchControl.search('{{ object.title }}');}ymaps.ready(init);</script>
+								</div>
+							</div>
+							
+							
+							
+							{% if object.image %}
+							<div class="zoompro-wrap mb-3">
+								<div class="zoompro-span">
+									<img class="zoompro" src="{{ object.genplan.url }}" data-zoom-image="{{ object.genplan.url }}"  alt="{{ object.title }} фото" width="625" height="808" />
+								</div>
+							</div>
+							{% else %}
+							<div class="zoompro-wrap mb-3">
+								<div class="zoompro-span">
+									<img class="zoompro" src="/static/img/noimage.jpg" data-zoom-image="/static/img/noimage.jpg"  alt="{{ object.title }} фото" width="625" height="808" />
+								</div>
+							</div>
+							
+							{% endif %}
+							
+							
+							
+							
+							
+							
+							
+							{% comment %}
+							{% for item in foto_listing %}	
+							<div class="zoompro-wrap mb-3">
+								<div class="zoompro-span">
+									<img class="zoompro" src="{{ item.murl }}" data-zoom-image="{{ item.murl }}"  width="625" height="808" />
+								</div>
+							</div> 
+							{% endfor %}
+							{% endcomment %}
+						</div>
+					</div>
+					<div class="col-lg-6 col-md-6 col-sm-12 col-12 product-layout-info">
+						<div class="product-sticky-style">
+							<div class="product-single-meta">
+								
+								
+								
+								
+								
+								<div class="sort-description mb-3">
+									
+									<div id="yandex_rtb_R-A-2363917-2" style="height:300px"></div>
+									<script>
+										window.yaContextCb.push(()=>{
+											Ya.Context.AdvManager.render({
+												"blockId": "R-A-2363917-2",
+												"renderTo": "yandex_rtb_R-A-2363917-2"
+											})
+										})
+									</script>
+									
+									{{ object.shortdescription|safe }}
+								</div>
+								
+								<hr>
+								<div class="userViewMsg featureText" data-user="20" data-time="11000"><i class="icon anm anm-eye-r"></i><b class="uersView">21</b> Посетителей интересует {{ object.title }}</div> 
+							</div>
+							<div class="product-form product-form-border">                                      
+								<div class="variable-select d-flex-center mb-3">
+									<div class="product-item col-6 pe-2">
+										<div class="swatches-image swatch-0 option1" data-option-index="0">
+											<label class="label d-flex align-items-center">Тип:<span class="slVariant ms-1 fw-bold">Дом</span></label>
+											<select>
+												<option>Коттедж</option>
+												<option selected="selected">Дом</option>
+												<option>Дача</option>
+												<option>Таунхаус</option>
+												<option>Часть дома</option>
+												<option>Часть коттеджа</option>
+											</select>
+										</div>
+									</div>
+									<div class="product-item col-6 ps-2">
+										<div class="swatches-size swatch-1 option2" data-option-index="1">
+											<label class="label d-flex align-items-center">Размер<span class="slVariant ms-1 fw-bold">участка:</span> <a href="#sizechart-modal" class="text-link sizelink text-muted size-chart-modal" data-bs-toggle="modal" data-bs-target="#sizechart_modal">Как выбрать</a></label>
+											<select>
+												<option>6 соток</option>
+												<option selected="selected">7 соток</option>
+												<option>8 соток</option>
+												<option>9 соток</option>
+												<option>10 соток</option>
+												<option>20 соток</option>
+												<option>30 соток</option>
+												<option>40 соток</option>
+												<option>Более 50 соток</option>
+											</select>
+										</div>
+									</div>
+								</div>
+								<div class="product-action w-100 d-flex-wrap mb-3">
+									<div class="product-form-submit addcart fl-1 ms-0 mt-3">
+										<button type="submit" name="add" class="btn btn-primary product-form-pre-order"><span>Оставить заявку</span></button>
+									</div>
+								</div>
+								<p class="infolinks d-flex-center justify-content-between">
+									<a class="text-link wishlist" href="#"><i class="icon anm anm-heart-l me-2"></i> <span>Запомнить</span></a>
+									<a class="text-link compare" href="#"><i class="icon anm anm-sync-ar me-2"></i> <span>Сравнить</span></a>
+									<a href="#shippingInfo-modal" class="text-link shippingInfo" data-bs-toggle="modal" data-bs-target="#shippingInfo_modal"><i class="icon anm anm-paper-l-plane me-2"></i> <span>Поделиться</span></a>
+									<a href="#productInquiry-modal" class="text-link emaillink me-0" data-bs-toggle="modal" data-bs-target="#productInquiry_modal"><i class="icon anm anm-question-cil me-2"></i> <span>Задать вопрос</span></a>
+								</p>
+							</div>
+							<div class="product-notify-form my-4 bg-block">
+								<p class="fw-600 mb-2 pb-1 lh-1">Уведомить о новых участках в {{ object.title|cut:'Коттеджный поселок ' }}:</p>
+								<div id="productNotify_form" class="productNotify-form form-vertical">
+									<div class="input-group">
+										<input type="email" class="form-control" id="notifyFormEmail" name="notify[email]" placeholder="Введите email" value="" required />
+										<button type="submit" class="input-group-btn btn btn-secondary" name="submit">Отправить</button>
+									</div>
+								</div>
+								
+							</div>
+							
+							{% comment %}
+							<div id="yandex_rtb_R-A-2363917-2-9" style="height:300px"></div>
+							<script>window.yaContextCb.push(()=>{
+								Ya.Context.AdvManager.render({
+									renderTo: 'yandex_rtb_R-A-2363917-2-9',
+									blockId: 'R-A-2363917-2',
+									pageNumber: 9
+								})
+							})</script>
+							{% endcomment %}
+						</div>
+					</div>
+					
+					
+					
+					<div class="col-12 col-sm-12 col-md-12 col-lg-3 sidebar sidebar-bg filterbar">
+						<div class="closeFilter"><i class="icon anm anm-times-r"></i></div>
+						<div class="sidebar-tags clearfix">
+							
+							
+							<div class="sidebar-widget filterBox filter-widget product-tag">
+								<div class="widget-title h2">Шоссе</div>
+								<div class="widget-content filterDD">
+									
+									
+									{% full_tree_for_model pos.Category as nodes %}
+									<ul class="sidebar-categories scrollspy morelist clearfix">
+										{% for node,structure in nodes|tree_info %}
+										
+										<li class="lvl1 more-item"><a class="site-nav" href="{{ node.get_absolute_url }}">{{ node.menutitle|default:node.title }}</a></li>
+										
+										{% endfor %}
+									</ul>
+									
+									
+									
+									
+								</div>
+							</div>
+							
+							
+							
+							
+							<div class="sidebar-widget filterBox filter-widget product-tag">
+								<div class="widget-title h2">Инфраструктура {{ object.title|cut:'Коттеджный поселок ' }}</div>
+								<div class="widget-content filterDD">
+									<ul class="tags-list product-tags d-flex-wrap clearfix">
+										<li class="item">
+											<a target="_blank" class="rounded-5" href="/search/?q={{ object.title|urlencode }}%20Магазин">Магазин {{ object.title|cut:'Коттеджный поселок ' }}</a>
+										</li>
+										<li class="item">
+											<a target="_blank" class="rounded-5" href="/search/?q={{ object.title|urlencode }}%20Парковочные20места">Парковочные места в {{ object.title|cut:'Коттеджный поселок ' }}</a>
+										</li>
+										
+										<li class="item">
+											<a target="_blank" class="rounded-5" href="/search/?q={{ object.title|urlencode }}%20Баня">Баня</a>
+										</li>
+										<li class="item">
+											<a target="_blank" class="rounded-5" href="/search/?q={{ object.title|urlencode }}%20Гостевая%20парковка">Гостевая парковка в {{ object.title|cut:'Коттеджный поселок ' }}</a>
+										</li>
+										<li class="item">
+											<a target="_blank" class="rounded-5" href="/search/?q={{ object.title|urlencode }}%20Детская%20игровая%20площадка">Детская игровая площадка</a>
+										</li>
+										<li class="item">
+											<a target="_blank" class="rounded-5" href="/search/?q={{ object.title|urlencode }}%20Зона%20отдыха">Зона отдыха {{ object.title|cut:'Коттеджный поселок ' }}</a>
+										</li>
+										<li class="item">
+											<a target="_blank" class="rounded-5" href="/search/?q={{ object.title|urlencode }}%20Минимаркет">Минимаркет в {{ object.title|cut:'Коттеджный поселок ' }}</a>
+										</li>
+										<li class="item">
+											<a target="_blank" class="rounded-5" href="/search/?q={{ object.title|urlencode }}%20Ресторан">Ресторан {{ object.title|cut:'Коттеджный поселок ' }}</a>
+										</li>
+										<li class="item">
+											<a target="_blank" class="rounded-5" href="/search/?q={{ object.title|urlencode }}%20Спортивная%20площадка">Спортивная площадка {{ object.title|cut:'Коттеджный поселок ' }}</a>
+										</li>
+										
+										<li class="item">
+											<a target="_blank" class="rounded-5" href="/search/?q={{ object.title|urlencode }}%20Охрана">Охрана объекта</a>
+										</li>
+										
+										<li class="item">
+											<a target="_blank" class="rounded-5" href="/search/?q={{ object.title|urlencode }}%20Пляж">Пляж</a>
+										</li>
+										<li class="item">
+											<a target="_blank" class="rounded-5" href="/search/?q={{ object.title|urlencode }}%20Загородная недвижимость">Загородная недвижимость</a>
+										</li>
+										
+										
+										
+										
+										
+										
+									</ul>
+									<span class="btn btn-sm brd-link btnview">Все</span> 
+								</div>
+							</div>
+							
+							<div class="sidebar-widget filterBox filter-widget product-tag">
+								<div class="widget-title h2">Коммуникации {{ object.title|cut:'Коттеджный поселок ' }}</div>
+								<div class="widget-content filterDD">
+									<ul class="tags-list product-tags d-flex-wrap clearfix">
+										
+										<li class="item">
+											<a target="_blank" class="rounded-5" href="/search/?q={{ object.title|urlencode }}%20Видеонаблюдение">Видеонаблюдение </a>
+										</li>
+										<li class="item">
+											<a target="_blank" class="rounded-5" href="/search/?q={{ object.title|urlencode }}%20Интернет">Интернет {{ object.title|cut:'Коттеджный поселок ' }}</a>
+										</li>
+										<li class="item">
+											<a target="_blank" class="rounded-5" href="/search/?q={{ object.title|urlencode }}%20Канализация">Канализация {{ object.title|cut:'Коттеджный поселок ' }}</a>
+										</li>
+										<li class="item">
+											<a target="_blank" class="rounded-5" href="/search/?q={{ object.title|urlencode }}%20Газ">Газ {{ object.title|cut:'Коттеджный поселок ' }}</a>
+										</li>
+										<li class="item">
+											<a target="_blank" class="rounded-5" href="/search/?q={{ object.title|urlencode }}%20Водоснабжение">Водоснабжение {{ object.title|cut:'Коттеджный поселок ' }}</a>
+										</li>
+										<li class="item">
+											<a target="_blank" class="rounded-5" href="/search/?q={{ object.title|urlencode }}%20Электричество">Электричество {{ object.title|cut:'Коттеджный поселок ' }}</a>
+										</li>
+										
+										
+										
+										
+										
+										
+									</ul>
+									<span class="btn btn-sm brd-link btnview">Все</span> 
+								</div>
+							</div>
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							<div class="sidebar-widget filterBox filter-widget">
+								<div class="widget-title h2">Цена</div>
+								<span class="widget-content price-filter filterDD" action="#" method="post">
+									<div id="slider-range" class="mt-2"></div>
+									<div class="row">
+										<div class="col-6"><input id="amount" type="text" /></div>
+										<div class="col-6 text-right"><button class="btn btn-sm">Применить</button></div>
+									</div>
+								</span>
+							</div>
+							
+						</div>
+						
+						
+						
+						
+					</div>
+					
+				</div>
+				{% for item in neighbors2 %}
+				<a href="{{ item.get_absolute_url }}" class="product-nav prev-pro clr-none d-flex-center justify-content-between" title="Previous Product">
+					<span class="details">
+						<span class="name">{{ item.title }}</span>
+					</span>
+					<span class="img">
+						{% if item.image %}
+						<img src="{{ item.image.url }}" alt="{{ item.title }}" width="120" height="170" />
+						{% else %}
+						<img src="/static/img/noimage.jpg" alt="{{ item.title }}" width="120" height="170" />
+						{% endif %}
+					</span>
+				</a>
+				{% endfor %}	
+				{% for item in neighbors1 %}
+				<a href="{{ item.get_absolute_url }}" class="product-nav next-pro clr-none d-flex-center justify-content-between" title="Next Product">
+					<span class="img">
+						{% if item.image %}
+						<img src="{{ item.image.url }}" alt="{{ item.title }}" width="120" height="170" />
+						{% else %}
+						<img src="/static/img/noimage.jpg" alt="{{ item.title }}" width="120" height="170" />
+						{% endif %}
+					</span>
+					<span class="details">
+						<span class="name">{{ item.title }}</span>
+					</span>
+				</a>
+				{% endfor %}
+				<div id="revs" class="tabs-listing section pb-0">
+					<ul class="product-tabs style3 border-bottom list-unstyled d-flex-wrap d-flex-justify-center d-none d-md-flex">
+						<li rel="description" class="active"><a class="tablink">О поселке</a></li>
+						<li rel="additionalInformation"><a class="tablink">Застройщик</a></li>
+						<li rel="size-chart"><a class="tablink">Проекты</a></li>
+						
+						<li rel="reviews"><a class="tablink">Отзывы</a></li>
+					</ul>
+					<div class="tab-container">
+						<h3 class="tabs-ac-style d-md-none active" rel="description">О поселке</h3>
+						<div id="description" class="tab-content">
+							<div class="product-description">
+								<div class="row">
+									<div class="col-12 col-sm-12 col-md-12 col-lg-12">
+										<div class="row">
+											<div class="col-12 col-sm-12 col-md-12 col-lg-12">
+												{{ object.description|safe }}
+												<div class="sidebar-widget clearfix tags-clouds">
+													<hr>
+													<div class="widget-content">
+														<ul class="tags-list d-flex-wrap">
+															{% for item in plitka_bottom %}
+															<li class="item"><a class="rounded-3" href="">{{ item }}</a></li>
+															{% endfor %}  
+														</ul>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<h3 class="tabs-ac-style d-md-none" rel="additionalInformation">Застройщик {{ object.title|cut:'Коттеджный поселок ' }}</h3>
+						<div id="additionalInformation" class="tab-content">
+							<div class="product-description">
+								
+								{{ object.builder|safe }}
+								
+							</div>
+						</div>
+						<h3 class="tabs-ac-style d-md-none" rel="size-chart">Проекты для {{ object.title|cut:'Коттеджный поселок ' }}</h3>
+						<div id="size-chart" class="tab-content">
+							
+							
+							<div class="blog-grid-view">
+								<div class="row col-row row-cols-lg-3 row-cols-sm-2 row-cols-1">
+									
+									{% for item in projects %}
+									<div class="blog-item col-item">
+										<div class="blog-article zoomscal-hov">
+											<div class="blog-img">
+												<a class="featured-image rounded-0 zoom-scal" href="{{ item.get_absolute_url }}">
+												<img class="rounded-0 blur-up lazyload" data-src="{{ item.image.url }}" src="{{ item.image.url }}" alt="New shop collection our shop" width="740" height="410" /></a>
+											</div>
+											<div class="blog-content">
+												<span class="h3"><a href="{{ item.get_absolute_url }}">{{ item.title }}</a></span>
+												
+												
+												
+											</div>
+										</div>
+									</div>
+									{% endfor %}
+									
+									
+									
+								</div>
+								
+								
+							</div>
+						</div>
+						
+						<h3 class="tabs-ac-style d-md-none" i="reviews">Отзывы о {{ object.title|cut:'Коттеджный поселок'|cut:'Коттеджный посёлок'}}</h3>
+						<div class="tab-content">
+							<div class="row">
+								<div class="col-12 col-sm-12 col-md-12 col-lg-6 mb-4">
+									<div class="ratings-main">
+										<div class="avg-rating d-flex-center mb-3">
+											<h4 class="avg-mark">4.5</h4>
+											<div class="avg-content ms-3">
+												<a class="text-rating">Рейтинг {{ object.title|cut:'Коттеджный поселок ' }}</a>
+												<div class="ratings-full product-review">
+													<a class="reviewLink d-flex-center" href="#reviews"><i class="icon anm anm-star"></i><i class="icon anm anm-star"></i><i class="icon anm anm-star"></i><i class="icon anm anm-star"></i><i class="icon anm anm-star-o"></i><span class="caption ms-2">24 Отзыва</span></a>
+												</div>
+											</div>
+										</div>
+										<div class="ratings-list">
+											<div class="ratings-container d-flex align-items-center mt-1">
+												<div class="ratings-full product-review m-0">
+													<a class="reviewLink d-flex align-items-center" href="#reviews"><i class="icon anm anm-star"></i><i class="icon anm anm-star"></i><i class="icon anm anm-star"></i><i class="icon anm anm-star"></i><i class="icon anm anm-star-o"></i></a>
+												</div>
+												<div class="progress"><div class="progress-bar" role="progressbar" aria-valuenow="99" aria-valuemin="0" aria-valuemax="100" style="width:99%;"></div></div>
+												<div class="progress-value">99%</div>
+											</div>
+											<div class="ratings-container d-flex align-items-center mt-1">
+												<div class="ratings-full product-review m-0">
+													<a class="reviewLink d-flex align-items-center" href="#reviews"><i class="icon anm anm-star"></i><i class="icon anm anm-star"></i><i class="icon anm anm-star"></i><i class="icon anm anm-star"></i><i class="icon anm anm-star-o"></i></a>
+												</div>
+												<div class="progress"><div class="progress-bar" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" style="width:75%;"></div></div>
+												<div class="progress-value">75%</div>
+											</div>
+											<div class="ratings-container d-flex align-items-center mt-1">
+												<div class="ratings-full product-review m-0">
+													<a class="reviewLink d-flex align-items-center" href="#reviews"><i class="icon anm anm-star"></i><i class="icon anm anm-star"></i><i class="icon anm anm-star"></i><i class="icon anm anm-star-o"></i><i class="icon anm anm-star-o"></i></a>
+												</div>
+												<div class="progress"><div class="progress-bar" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width:50%;"></div></div>
+												<div class="progress-value">50%</div>
+											</div>
+											<div class="ratings-container d-flex align-items-center mt-1">
+												<div class="ratings-full product-review m-0">
+													<a class="reviewLink d-flex align-items-center" href="#reviews"><i class="icon anm anm-star"></i><i class="icon anm anm-star"></i><i class="icon anm anm-star-o"></i><i class="icon anm anm-star-o"></i><i class="icon anm anm-star-o"></i></a>
+												</div>
+												<div class="progress"><div class="progress-bar" role="progressbar" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100" style="width:25%;"></div></div>
+												<div class="progress-value">25%</div>
+											</div>
+											<div class="ratings-container d-flex align-items-center mt-1">
+												<div class="ratings-full product-review m-0">
+													<a class="reviewLink d-flex align-items-center" href="#reviews"><i class="icon anm anm-star"></i><i class="icon anm anm-star-o"></i><i class="icon anm anm-star-o"></i><i class="icon anm anm-star-o"></i><i class="icon anm anm-star-o"></i></a>
+												</div>
+												<div class="progress"><div class="progress-bar" role="progressbar" aria-valuenow="5" aria-valuemin="0" aria-valuemax="100" style="width:5%;"></div></div>
+												<div class="progress-value">05%</div>
+											</div>
+										</div>
+									</div>
+									<hr />
+									<div class="spr-reviews">
+										
+										<div class="review-inner">
+											
+											{% comment %}
+											<div class="spr-review d-flex w-100">
+												<div class="spr-review-profile flex-shrink-0">
+													<img class="blur-up lazyload" data-src="assets/images/users/testimonial2.jpg" src="assets/images/users/testimonial2.jpg" alt="" width="200" height="200" />
+												</div>
+												<div class="spr-review-content flex-grow-1">
+													<div class="d-flex justify-content-between flex-column mb-2">
+														<div class="title-review d-flex align-items-center justify-content-between">
+															<h5 class="spr-review-header-title text-transform-none mb-0">Eleanor Pena</h5>
+															<span class="product-review spr-starratings m-0"><span class="reviewLink"><i class="icon anm anm-star"></i><i class="icon anm anm-star"></i><i class="icon anm anm-star"></i><i class="icon anm anm-star"></i><i class="icon anm anm-star"></i></span></span>
+														</div>
+													</div>
+													<b class="head-font">Good and High quality</b>
+													<p class="spr-review-body">There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour.</p>
+												</div>
+											</div>
+											{% endcomment %}
+										</div>
+									</div>
+								</div>
+								<div class="col-12 col-sm-12 col-md-12 col-lg-6 mb-4">
+									<form method="post" action="#" class="product-review-form new-review-form">
+										<h3 class="spr-form-title">Оставить отзыв</h3>
+										
+										<fieldset class="row spr-form-contact">
+											<div class="col-sm-6 spr-form-contact-name form-group">
+												<label class="spr-form-label" for="nickname">Имя <span class="required">*</span></label>
+												<input class="spr-form-input spr-form-input-text" id="nickname" type="text" name="name" required />
+											</div>
+											<div class="col-sm-6 spr-form-contact-email form-group">
+												<label class="spr-form-label" for="email">Email <span class="required">*</span></label>
+												<input class="spr-form-input spr-form-input-email " id="email" type="email" name="email" required />
+											</div>
+											<div class="col-sm-6 spr-form-review-title form-group">
+												<label class="spr-form-label" for="review">Тема </label>
+												<input class="spr-form-input spr-form-input-text " id="review" type="text" name="review" />
+											</div>
+											<div class="col-sm-6 spr-form-review-rating form-group">
+												<label class="spr-form-label">Рейтинг</label>
+												<div class="product-review pt-1">
+													<div class="review-rating">
+														<a href="#;"><i class="icon anm anm-star-o"></i></a><a href="#;"><i class="icon anm anm-star-o"></i></a><a href="#;"><i class="icon anm anm-star-o"></i></a><a href="#;"><i class="icon anm anm-star-o"></i></a><a href="#;"><i class="icon anm anm-star-o"></i></a>
+													</div>
+												</div>
+											</div>
+											<div class="col-12 spr-form-review-body form-group">
+												<label class="spr-form-label" for="message">Содержание отзыва <span class="spr-form-review-body-charactersremaining"></span></label>
+												<div class="spr-form-input">
+													<textarea class="spr-form-input spr-form-input-textarea" id="message" name="message" rows="3"></textarea>
+												</div>
+											</div>
+										</fieldset>
+										<div class="spr-form-actions clearfix">
+											<input type="submit" class="btn btn-primary spr-button spr-button-primary" value="Опубликовать отзыв" />
+										</div>
+									</form>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<section class="section product-slider pb-0">
+				<div class="container">
+					<div id="yandex_rtb_R-A-2363917-2-2" style="height:300px"></div>
+					<script>window.yaContextCb.push(()=>{
+						Ya.Context.AdvManager.render({
+							renderTo: 'yandex_rtb_R-A-2363917-2-2',
+							blockId: 'R-A-2363917-2',
+							pageNumber: 2
+						})
+					})</script>
+					<div class="section-header">
+						<h2>Поселки в области</h2>
+					</div>
+					<div class="product-slider-4items gp10 arwOut5 grid-products">
+						{% for item in another_comp %}	
+						<div class="item col-item">
+							<div class="product-box">
+								<div class="product-image">
+									<a href="{{ item.get_absolute_url }}" class="product-img">
+										{% if item.image %}
+										<img class="blur-up lazyload" src="{{ item.image.url }}" alt="{{ item.title }}" title="{{ item.title }}" width="625" height="808" />
+										{% else %}
+										<img class="blur-up lazyload" src="/static/img/noimage.jpg" alt="{{ item.title }}" title="{{ item.title }}" width="625" height="808" />
+										{% endif %}
+									</a>
+									
+								</div>
+								<div class="product-details text-left">
+									<div class="product-name">
+										<a href="{{ item.get_absolute_url }}">{{ item.title|cut:'Коттеджный поселок'|cut:'Коттеджный посёлок' }}</a>
+									</div>
+									
+									<div class="product-review">
+										<i class="icon anm anm-star"></i><i class="icon anm anm-star"></i><i class="icon anm anm-star"></i><i class="icon anm anm-star"></i><i class="icon anm anm-star-o"></i>
+										<span class="caption hidden ms-1">{{ item.views }}</span>
+										<span class="caption hidden ms-1">Площадь</span>
+									</div>
+								</div>
+							</div>
+						</div>
+						{% endfor %}	
+					</div>
+					<div id="yandex_rtb_R-A-2363917-2-3" style="height:300px"></div>
+					<script>window.yaContextCb.push(()=>{
+						Ya.Context.AdvManager.render({
+							renderTo: 'yandex_rtb_R-A-2363917-2-3',
+							blockId: 'R-A-2363917-2',
+							pageNumber: 3
+						})
+					})</script>
+				</div>
+			</section>
+		</div>
+	</div>
+	{% endblock content %}	
+	{% block extra_body %}
+{% endblock %}
