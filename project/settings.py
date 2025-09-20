@@ -29,7 +29,7 @@ SECRET_KEY = 'django-insecure-in(5=5p6y4#t+1r)wwu70=an1=o7d-ew74)@2!)an)e4od_0t3
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['109.172.101.168', 'innovatehome.ru']
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -43,17 +43,12 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.humanize',
     'django.contrib.sitemaps',
-    'django_user_agents',
-    'snowpenguin.django.recaptcha3',
+    'django_user_agents',   
     'mptt',
-    'import_export',
-    'tinymce',
-    'shop',
-    'search',
+    'import_export',    
+    'shop',   
     'blog',
-    'pages',
-    'magaz',
-    'brands',
+    
 ]
 
 MIDDLEWARE = [
@@ -94,9 +89,9 @@ WSGI_APPLICATION = 'project.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'project_db6',
-        'USER': 'bddmin',
-        'PASSWORD': 'sePzbxeOmDAMqtDQE79PmY',
+        'NAME': 'project_db',
+        'USER': 'admin',
+        'PASSWORD': '111',
         'HOST': '127.0.0.1',
         'PORT': '5432',
 		'CONN_MAX_AGE': 60 * 10,  # 10 minutes
@@ -181,10 +176,6 @@ RECAPTCHA_SCORE_THRESHOLD = 0.9
 YANDEX_API_KEY = str(os.getenv('YANDEX_API_KEY'))
 YANDEX_MARKET_TOKEN = str(os.getenv('YANDEX_API_KEY'))
 
-
-# Celery
-#CELERY_BROKER_URL = 'redis://127.0.0.1:6379/0'
-#CELERY_RESULT_BACKEND = 'redis://127.0.0.1:6379/0'
 
 CELERY_BROKER_URL = 'amqp://guest:guest@127.0.0.1:5672//'
 CELERY_RESULT_BACKEND = 'rpc://'
