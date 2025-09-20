@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.humanize',
     'django.contrib.sitemaps',
+<<<<<<< HEAD
     'django_user_agents',    
     'mptt',
     'import_export',    
@@ -50,6 +51,14 @@ INSTALLED_APPS = [
     'blog',
     
    
+=======
+    'django_user_agents',   
+    'mptt',
+    'import_export',    
+    'shop',   
+    'blog',
+    
+>>>>>>> 80a488ff2711f33b39ebf293f8edc5e3e8fb95a7
 ]
 
 MIDDLEWARE = [
@@ -177,6 +186,10 @@ RECAPTCHA_SCORE_THRESHOLD = 0.9
 YANDEX_API_KEY = str(os.getenv('YANDEX_API_KEY'))
 YANDEX_MARKET_TOKEN = str(os.getenv('YANDEX_API_KEY'))
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 80a488ff2711f33b39ebf293f8edc5e3e8fb95a7
 CELERY_BROKER_URL = 'amqp://guest:guest@127.0.0.1:5672//'
 CELERY_RESULT_BACKEND = 'rpc://'
 
