@@ -20,8 +20,12 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
+# Создаём директории для статики и медиа — ОБЯЗАТЕЛЬНО!
 RUN mkdir -p /app/staticfiles /app/media
+
+# Проверяем, что директории созданы (на всякий случай)
+RUN ls -la /app/staticfiles /app/media || true
 
 EXPOSE 8000
 
-CMD ["gunicorn", "--bind", "0.0.0.0:8000", "--workers", "3", "--timeout", "120", "--keep-alive", "5", "pposter.wsgi:application"]
+CMD ["gunicorn", "--bind", "0.0.0.0:8000", "--workers", "3", "--timeout", "120", "--keep-alive", "5", "$PROJECT_NAME.wsgi:application"]
