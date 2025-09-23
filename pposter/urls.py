@@ -7,7 +7,7 @@ from django.contrib.sitemaps.views import sitemap
 from django.views.decorators.cache import cache_page
 from django.urls import include, path
 
-from project.sitemaps import BlogItemSitemap, BlogCategorySitemap, ShopItemSitemap, ShopCategorySitemap, MagazSitemap
+from pposter.sitemaps import BlogItemSitemap, BlogCategorySitemap, ShopItemSitemap, ShopCategorySitemap, MagazSitemap
 
 SITEMAP_CACHE_TIMEOUT = 86400  # 24 часа
 

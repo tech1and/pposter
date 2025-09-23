@@ -4,10 +4,10 @@ import os
 from celery import Celery
 
 # Устанавливаем переменную окружения для Django
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'project.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'pposter.settings')
 
 # Создаём экземпляр Celery
-app = Celery('project')
+app = Celery('pposter')
 
 # Загружаем конфигурацию из Django-настроек
 app.config_from_object('django.conf:settings', namespace='CELERY')

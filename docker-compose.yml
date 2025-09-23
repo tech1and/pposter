@@ -1,0 +1,100 @@
+services:
+  db:
+    image: postgres:15-alpine
+    container_name: pposter_db
+    restart: unless-stopped
+    env_file:
+      - .env
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - app_network
+
+  redis:
+    image: redis:7-alpine
+    container_name: pposter_redis
+    restart: unless-stopped
+    command: redis-server --save 60 1 --loglevel warning
+    networks:
+      - app_network
+
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: pposter_web
+    restart: unless-stopped
+    env_file:
+      - .env
+    command: gunicorn pposter.wsgi:application --bind 0.0.0.0:8000 --workers 3 --timeout 120 --keep-alive 5
+    volumes:
+      - static_volume:/app/staticfiles
+      - media_volume:/app/media
+    expose:
+      - 8000
+    depends_on:
+      - db
+      - redis
+    networks:
+      - app_network
+
+  celery:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: pposter_celery
+    restart: unless-stopped
+    env_file:
+      - .env
+    command: celery -A pposter worker -l INFO -P eventlet
+    volumes:
+      - .:/app
+    depends_on:
+      - db
+      - redis
+    networks:
+      - app_network
+
+  celery-beat:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: pposter_celery_beat
+    restart: unless-stopped
+    env_file:
+      - .env
+    command: celery -A pposter beat -l INFO --scheduler django_celery_beat.schedulers:DatabaseScheduler
+    volumes:
+      - .:/app
+    depends_on:
+      - db
+      - redis
+    networks:
+      - app_network
+
+  nginx:
+    image: nginx:alpine
+    container_name: ${PROJECT_NAME}_nginx
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - static_volume:/app/staticfiles
+      - media_volume:/app/media
+      - ./nginx/conf.d:/etc/nginx/conf.d
+      - $SSL_CERT:/etc/ssl/certs/fullchain.pem
+      - $SSL_KEY:/etc/ssl/certs/privkey.pem
+    depends_on:
+      - web
+    networks:
+      - app_network
+
+volumes:
+  postgres_data:
+  static_volume:
+  media_volume:
+
+networks:
+  app_network:
+    driver: bridge
